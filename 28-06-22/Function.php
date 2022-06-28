@@ -4,12 +4,20 @@ if (isset($_POST['formsubmit'])) {
     $name = $_POST['username'];
     $email = $_POST['useremail'];
     $pass = password_hash($pass, PASSWORD_DEFAULT);
-    $INSERT = "INSERT INTO signup (user_name, user_email, user_pass) VALUES ('$name','$email','$pass')";
-    $query = mysqli_query($conn, $INSERT);
-    if ($query) {
-        header('location:index.php');
+    $SelectST = "SELECT * FROM signup WHERE user_email = '$email'";
+    $QueryST = mysqli_query($conn, $SelectST);
+    $RowST = mysqli_fetch_array($QueryST);
+    echo $RowST['user_email'];
+    if (mysqli_num_rows($QueryST) > 0) {
+        echo "Already exist";
     } else {
-        echo "Not INserted";
+        $INSERT = "INSERT INTO signup (user_name, user_email, user_pass) VALUES ('$name','$email','$pass')";
+        $query = mysqli_query($conn, $INSERT);
+        if ($query) {
+            header('location:index.php');
+        } else {
+            echo "Not INserted";
+        }
     }
 }
 if (isset($_REQUEST['formupdate'])) {
